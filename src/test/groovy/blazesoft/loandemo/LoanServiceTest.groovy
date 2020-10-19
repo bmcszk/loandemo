@@ -54,7 +54,7 @@ class LoanServiceTest extends Specification {
         def loan = service.extendLoan(uuid)
 
         then:
-        1 * repoMock.getById(uuid) >> existingLoan
+        1 * repoMock.getById(uuid) >> Optional.of(existingLoan)
         loan.amount == existingLoan.amount
         loan.period == 8
         loan.created == existingLoan.created
@@ -76,8 +76,18 @@ class LoanServiceTest extends Specification {
         service.extendLoan(uuid)
 
         then:
-        1 * repoMock.getById(uuid) >> existingLoan
+        1 * repoMock.getById(uuid) >> Optional.of(existingLoan)
         def exception = thrown(LoanExtensionException)
         exception.message == "Already extended"
+    }
+
+    def "should not extend not existent loan"() {
+        when:
+        service.extendLoan(uuid)
+
+        then:
+        1 * repoMock.getById(uuid) >> Optional.empty()
+        def exception = thrown(LoanNotFoundException)
+        exception.message == "Loan not found"
     }
 }

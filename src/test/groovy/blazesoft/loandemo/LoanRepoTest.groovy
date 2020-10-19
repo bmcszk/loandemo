@@ -37,6 +37,19 @@ class LoanRepoTest extends Specification {
         def result = loanRepo.getById(uuid)
 
         then:
-        result == loan
+        result.isPresent()
+        result.get() == loan
     }
+
+    def "should not get by not existing id"() {
+        given:
+        loanRepo.save(loan)
+
+        when:
+        def result = loanRepo.getById(UUID.randomUUID())
+
+        then:
+        !result.isPresent()
+    }
+
 }

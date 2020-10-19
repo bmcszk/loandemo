@@ -26,7 +26,8 @@ public class LoanService {
     }
 
     public Loan extendLoan(UUID loanId) {
-        final var loan = repo.getById(loanId);
+        final var loan = repo.getById(loanId)
+              .orElseThrow(() -> new LoanNotFoundException("Loan not found"));
         if (loan.isExtended()) {
             throw new LoanExtensionException("Already extended");
         }

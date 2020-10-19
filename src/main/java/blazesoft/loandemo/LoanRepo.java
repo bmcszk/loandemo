@@ -2,6 +2,7 @@ package blazesoft.loandemo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,7 @@ public class LoanRepo {
         loanMap.put(request.getId(), request);
     }
 
-    public Loan getById(UUID uuid) {
-        return loanMap.get(uuid);
+    public Optional<Loan> getById(UUID uuid) {
+        return Optional.ofNullable(loanMap.get(uuid));
     }
 }
